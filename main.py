@@ -8,7 +8,7 @@ warnings.filterwarnings(
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, AfterValidator, BeforeValidator, Field, EmailStr
-from typing import Annotated, Optional, Set
+from typing import Annotated
 
 app = FastAPI()
 
@@ -25,16 +25,16 @@ class Person(BaseModel):
     id: int
     firstname: ValidatedName
     lastname: ValidatedName
-    email: EmailStr | None = None
+    email: EmailStr | None 
     favorite_anime: str | None = None
     model_config = {"validate_assignment": True}
 
 _people = [
     Person(id=0, firstname="John", lastname="Doe", email="matt@aresayoo.com"),
-    Person(id=1, firstname="Matt", lastname="A"),
-    Person(id=2, firstname="Joe", lastname="Blow")
+    Person(id=1, firstname="Matt", lastname="A", email=None),
+    Person(id=2, firstname="Joe", lastname="Blow", email=None)
 ]
-_free_ids: Set[int] = set()
+_free_ids: set[int] = set()
 
 def get_next_id() -> int:
     if _free_ids:
@@ -47,24 +47,24 @@ def get_next_id() -> int:
 def read_root():
     return {"message": "RESTfulAPI is running!"}
 
-@app.get("/v1/api/people")
+@app.get("/api/v1/people")
 def get_people():
     return _people
 
-@app.get("/v1/api/people/{person_id}")
+@app.get("/api/v1/people/{person_id}")
 def get_person(person_id: int):
     for person in _people:
         if person.id == person_id:
             return person
     raise HTTPException(status_code=404, detail="Person not found")
 
-@app.post("/v1/api/people")
+@app.post("/api/v1/people")
 def create_person(firstname: str, lastname: str, email: str = None, favorite_anime: str = None):
     new_person = Person(id = get_next_id(), firstname=firstname, lastname=lastname, email=email, favorite_anime=favorite_anime)
     _people.append(new_person)
     return new_person
 
-@app.put("/v1/api/people/{person_id}")
+@app.put("/api/v1/people/{person_id}")
 def update_person(person_id: int, firstname: str = None, lastname: str = None, email: str = None, favorite_anime: str = None):
     for person in _people:
         if person.id == person_id:
@@ -79,7 +79,7 @@ def update_person(person_id: int, firstname: str = None, lastname: str = None, e
             return person
     raise HTTPException(status_code=404, detail="Person not found")
 
-@app.delete("/v1/api/people/{person_id}")
+@app.delete("/api/v1/people/{person_id}")
 def delete_person(person_id: int):
     for person in _people:
         if person.id == person_id:
