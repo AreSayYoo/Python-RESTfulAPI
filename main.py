@@ -25,12 +25,12 @@ class Person(BaseModel):
     id: int
     firstname: ValidatedName
     lastname: ValidatedName
-    email: EmailStr
-    favorite_anime: Optional[str] = None
+    email: EmailStr | None = None
+    favorite_anime: str | None = None
     model_config = {"validate_assignment": True}
 
 _people = [
-    Person(id=0, firstname="John", lastname="Doe"),
+    Person(id=0, firstname="John", lastname="Doe", email="matt@aresayoo.com"),
     Person(id=1, firstname="Matt", lastname="A"),
     Person(id=2, firstname="Joe", lastname="Blow")
 ]
