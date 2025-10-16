@@ -48,8 +48,32 @@ def read_root():
     return {"message": "RESTfulAPI is running!"}
 
 @app.get("/api/v1/people",response_model=list[Person])
-def get_people():
-    return _people
+def get_people(
+    favorite_anime: str | None = None,
+    hasEmail: bool | None = Query(default=None), 
+    hasFavoriteAnime: bool | None = Query(default=None)
+):
+    people = _people
+
+    filters = {
+        "favorite_anime": favorite_anime,
+    }
+
+    for field, value in filters.items():
+        if value:
+            # if we are filtering and remove case-sensitive check
+            people = [p for p in people if getattr(p, field, None) and value.lower() == getattr(p, field).lower()]
+    
+    if hasEmail is True:
+        people = [p for p in people if p.email]
+    elif hasEmail is False:
+        people = [p for p in people if not p.email]
+    if hasFavoriteAnime is True:
+        people = [p for p in people if p.favorite_anime]
+    elif hasFavoriteAnime is False:
+        people = [p for p in people if not p.favorite_anime]
+        
+    return people
 
 @app.get("/api/v1/people/{person_id}",response_model=Person)
 def get_person(person_id: int):
