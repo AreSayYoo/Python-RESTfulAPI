@@ -6,7 +6,7 @@ warnings.filterwarnings(
     category=UserWarning,
 )
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel, AfterValidator, BeforeValidator, Field, EmailStr
 from typing import Annotated
 
@@ -47,24 +47,24 @@ def get_next_id() -> int:
 def read_root():
     return {"message": "RESTfulAPI is running!"}
 
-@app.get("/api/v1/people")
+@app.get("/api/v1/people",response_model=list[Person])
 def get_people():
     return _people
 
-@app.get("/api/v1/people/{person_id}")
+@app.get("/api/v1/people/{person_id}",response_model=Person)
 def get_person(person_id: int):
     for person in _people:
         if person.id == person_id:
             return person
     raise HTTPException(status_code=404, detail="Person not found")
 
-@app.post("/api/v1/people")
+@app.post("/api/v1/people",response_model=Person,status_code=201)
 def create_person(firstname: str, lastname: str, email: str = None, favorite_anime: str = None):
     new_person = Person(id = get_next_id(), firstname=firstname, lastname=lastname, email=email, favorite_anime=favorite_anime)
     _people.append(new_person)
     return new_person
 
-@app.put("/api/v1/people/{person_id}")
+@app.put("/api/v1/people/{person_id}",response_model=Person)
 def update_person(person_id: int, firstname: str = None, lastname: str = None, email: str = None, favorite_anime: str = None):
     for person in _people:
         if person.id == person_id:
