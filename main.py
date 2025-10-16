@@ -7,16 +7,10 @@ warnings.filterwarnings(
 )
 
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, AfterValidator, BeforeValidator
+from pydantic import BaseModel, AfterValidator, BeforeValidator, Field, EmailStr
 from typing import Annotated, Optional, Set
 
 app = FastAPI()
-
-def validate_email(email: str, info):
-    email = email.strip().lower()
-    if "@" not in email:
-        raise HTTPException(status_code=422, detail="Invalid email address")
-    return email
 
 def validate_name(name: str, info):
     # strip spaces
@@ -31,7 +25,7 @@ class Person(BaseModel):
     id: int
     firstname: ValidatedName
     lastname: ValidatedName
-    email: Annotated[str, BeforeValidator(validate_email)] = None
+    email: EmailStr
     favorite_anime: Optional[str] = None
     model_config = {"validate_assignment": True}
 
