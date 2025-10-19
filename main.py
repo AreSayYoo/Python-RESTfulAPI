@@ -1,14 +1,14 @@
 import warnings
+from fastapi import FastAPI, HTTPException, Query
+from pydantic import BaseModel, BeforeValidator, EmailStr
+from typing import Annotated
+
 
 warnings.filterwarnings(
     "ignore",
     message="Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.",
     category=UserWarning,
 )
-
-from fastapi import FastAPI, HTTPException, Query
-from pydantic import BaseModel, AfterValidator, BeforeValidator, Field, EmailStr
-from typing import Annotated
 
 app = FastAPI()
 
