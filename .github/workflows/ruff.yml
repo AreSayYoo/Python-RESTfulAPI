@@ -23,13 +23,13 @@ jobs:
           python-version: '3.14'
 
       - name: Install Ruff
-        run: uv add ruff
+        run: pip install ruff
       
       - name: Run Ruff Lint
-        run: uv run ruff check .
+        run: ruff
 
       - name: Run Ruff Lint Final
-        run: uv run ruff check . --fix --diff --exit-zero
+        run: ruff check . --fix --diff --exit-zero
 
       - name: Run Ruff Format
-        run: uv run ruff format .
+        run: ruff format .
