@@ -16,5 +16,6 @@ dev = [
 ]
 
 [tool.ruff]
-target-version = "py314"
-line-length = 80
+lint.select = ["ALL"]
+line-length = 88
+lint.ignore = ["W","D100","FAST002","FBT001"]
