@@ -1,7 +1,7 @@
 # .pre-commit-config.yml
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: main  # Ruff version tag from the repo’s Releases
+    rev: v0.14.2  # Ruff version tag from the repo’s Releases
     hooks:
       - id: ruff-check           # Linter
         args: [ --fix ]          # Optional: auto-fix lint issues
