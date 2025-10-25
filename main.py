@@ -6,8 +6,7 @@ from pydantic import BaseModel, BeforeValidator, EmailStr
 
 warnings.filterwarnings(
     "ignore",
-    message=
-    "Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.",
+    message="Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.",
     category=UserWarning,
 )
 
@@ -42,7 +41,7 @@ ValidatedName = Annotated[str, BeforeValidator(validate_name)]
 
 class Person(BaseModel):
     """Represents a person in the system.
-    
+
     Attributes:
         id (int): The unique identifier for the person.
         firstname (ValidatedName): The first name of the person.
@@ -70,7 +69,7 @@ _free_ids: set[int] = set()
 
 def get_next_id() -> int:
     """Return the next available ID for a new person.
-    
+
     Returns:
         int: The next available ID.
 
@@ -85,10 +84,10 @@ def get_next_id() -> int:
 @app.get("/")
 def read_root() -> dict[str, str]:
     """Root endpoint to verify the API is live.
-    
+
     Returns:
         dict[str, str]: A message indicating the API is running.
-    
+
     """
     return {"message": "RESTfulAPI is running!"}
 
@@ -100,7 +99,7 @@ def get_people(
     has_favorite_anime: bool | None = Query(default=None),
 ) -> list[Person]:
     """Return a list of people, optionally filtered by query parameters.
-    
+
     Args:
         favorite_anime (str | None): Filter by favorite anime.
         has_email (bool | None): Filter by presence of email.
@@ -141,7 +140,7 @@ def get_people(
 @app.get("/api/v1/people/{person_id}", response_model=Person)
 def get_person(person_id: int) -> Person:
     """Return a person by their ID.
-    
+
     Args:
         person_id (int): The ID of the person to retrieve.
 
@@ -150,7 +149,7 @@ def get_person(person_id: int) -> Person:
 
     Raises:
         HTTPException: If the person is not found.
-        
+
     """
     for person in _people:
         if person.id == person_id:
@@ -166,13 +165,13 @@ def create_person(
     favorite_anime: str | None = None,
 ) -> Person:
     """Create a new person and add them to the system.
-    
+
     Args:
         firstname (str): The first name of the person.
         lastname (str): The last name of the person.
         email (str | None): The email address of the person.
         favorite_anime (str | None): The person's favorite anime.
-    
+
     Returns:
         Person: The newly created person.
 
@@ -197,14 +196,14 @@ def update_person(
     favorite_anime: str | None = None,
 ) -> Person:
     """Update an existing person's details.
-    
+
     Args:
         person_id (int): The ID of the person to update.
         firstname (str | None): The new first name of the person.
         lastname (str | None): The new last name of the person.
         email (str | None): The new email address of the person.
         favorite_anime (str | None): The new favorite anime of the person.
-    
+
     Returns:
         Person: The updated person.
 
@@ -229,16 +228,16 @@ def update_person(
 @app.delete("/api/v1/people/{person_id}", response_model=Person)
 def delete_person(person_id: int) -> Person:
     """Delete a person from the system by their ID.
-    
+
     Args:
         person_id (int): The ID of the person to delete.
-    
+
     Returns:
         Person: The deleted person.
 
     Raises:
         HTTPException: If the person is not found.
-    
+
     """
     for person in _people:
         if person.id == person_id:
